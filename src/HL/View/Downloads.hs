@@ -11,14 +11,11 @@ import HL.View.Template
 
 haskellPlatform :: Html ()
 haskellPlatform = do
-  let hproot = "http://45.55.156.136:8000/demo/plan-b/"
+  let hproot = "http://45.55.156.136:8000/demo2/plan-a/"
   h2_ "Haskell Platform"
   p_ $ "The Haskell Platform is a convenient way to install the Haskell development tools and"
        <> " a collection of commonly used Haskell packages from Hackage."
-  p_ $ "Get the Haskell Platform for:"
-  ul_ $ do li_ $ a_ [href_ $ hproot <> "windows.html"] "Windows"
-           li_ $ a_ [href_ $ hproot <> "mac.html"] "OS X"
-           li_ $ a_ [href_ $ hproot <> "linux.html"] "Linux"
+  p_ $ a_ [href_ (hproot <> "download.html")] "Get the Haskell Platform →"
   hr_ [style_ "height: 1px; background-color: black;"]
 
 -- | Downloads view.
