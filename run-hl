@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export PORT=2001
+./dist/build/hl/hl > log 2>&1 &
+pid="$!"
+ps "$pid"
+

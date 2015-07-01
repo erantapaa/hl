@@ -22,4 +22,7 @@ main =
      cacheVar <- newMVar cacheDir
      env <- getEnvironment
      let port = maybe 1990 read $ lookup "PORT" env
+         hl_downloads = maybe "(not set)" id $ lookup "HL_DOWNLOADS" env
+     putStrLn $ "starting server on port " ++ show port
+     putStrLn $ "  - HL_DOWNLOADS: " ++ hl_downloads
      warp port (App st cacheVar)

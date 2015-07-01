@@ -9,16 +9,50 @@ import HL.Types
 import HL.View
 import HL.View.Template
 
-haskellPlatform :: Html ()
-haskellPlatform = do
-  let hproot = "http://45.55.156.136:8000/demo2/plan-a/"
+-- | Render the Haskell Platform section for plan-a1
+haskellPlatform1 :: Text -> Html ()
+haskellPlatform1 hp_download_url = do
   h2_ "Haskell Platform"
   p_ $ "The Haskell Platform is a convenient way to install the Haskell development tools and"
        <> " a collection of commonly used Haskell packages from Hackage."
-  p_ $ a_ [href_ (hproot <> "download.html")] "Get the Haskell Platform →"
+  p_ $ a_ [href_ hp_download_url] "Get the Haskell Platform →"
   hr_ [style_ "height: 1px; background-color: black;"]
 
--- | Downloads view.
+haskellPlatformB :: Text -> Html ()
+haskellPlatformB hp_root = do
+  h2_ "Haskell Platform"
+  p_ $ "The Haskell Platform is a convenient way to install the Haskell development tools and"
+       <> " a collection of commonly used Haskell packages from Hackage."
+  p_ $ "Get the Haskell Platform for:"
+  ul_ $ do li_ $ a_ [href_ $ hp_root <> "windows.html"] "Windows"
+           li_ $ a_ [href_ $ hp_root <> "mac.html"] "OS X"
+           li_ $ a_ [href_ $ hp_root <> "linux.html"] "Linux"
+  hr_ [style_ "height: 1px; background-color: black;"]
+
+-- | Alternate Downloads view.
+-- | Place the HP on top. Split out links based on OS.
+downloadsValt :: Int -> Text -> FromLucid App
+downloadsValt which arg =
+  let hp_section = case which of
+                     1 -> haskellPlatform1 arg
+                     _ -> haskellPlatformB arg
+  in
+  template [] "Downloads"
+    (\url ->
+       container_
+         (row_
+            (span12_ [class_ "col-md-12"]
+               (do h1_ "Downloads"
+                   hp_section
+                   h2_ "Compiler and base libraries"
+                   p_ "Downloads are available on a per operating system basis:"
+                   ul_ (forM_ [minBound .. maxBound]
+                              (\os ->
+                                 li_ (a_ [href_ (url (DownloadsForR os))]
+                                         (toHtml (toHuman os)))))
+                   thirdParty))))
+
+-- | Original downloads view.
 downloadsV :: FromLucid App
 downloadsV =
   template [] "Downloads"
@@ -27,13 +61,15 @@ downloadsV =
          (row_
             (span12_ [class_ "col-md-12"]
                (do h1_ "Downloads"
-                   haskellPlatform
                    h2_ "Compiler and base libraries"
                    p_ "Downloads are available on a per operating system basis:"
                    ul_ (forM_ [minBound .. maxBound]
                               (\os ->
                                  li_ (a_ [href_ (url (DownloadsForR os))]
                                          (toHtml (toHuman os)))))
+                   h2_ "Haskell Platform"
+                   p_ "Many now recommend just using a bare compiler combined with sandboxed dependencies, especially for new users. However, others prefer to start with the curated blessed set of packages in the Haskell Platform, which is available for Windows, OS X, and Linux."
+                   p_ (a_ [href_ "http://www.haskell.org/platform/"] $ "Get the Haskell Platform →")
                    thirdParty))))
 
 -- | OS-specific downloads view.

@@ -9,9 +9,21 @@ import HL.Model.Markdown
 import HL.View.Downloads
 import HL.View
 
+import System.Environment (lookupEnv)
+import qualified Data.Text as T
+import Data.Maybe (fromMaybe)
+
 -- | Downloads controller.
-getDownloadsR :: C (Html ())
-getDownloadsR = lucid downloadsV
+-- getDownloadsR :: C (Html ())
+-- getDownloadsR = lucid downloadsV
+getDownloadsR :: C (Html())
+getDownloadsR = do
+  what <- fmap (fromMaybe "") $ io $ lookupEnv "HL_DOWNLOADS"
+  case what of
+    ('a':'1':' ':hp_root)  -> lucid (downloadsValt 1 (T.pack hp_root))
+    ('a':'2':' ':url)      -> redirect url
+    ('b':' ':hp_root)      -> lucid (downloadsValt 3 (T.pack hp_root))
+    _                      -> lucid downloadsV
 
 -- | Downloads for particular OS.
 getDownloadsForR :: OS -> C (Html ())
