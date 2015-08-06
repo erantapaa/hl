@@ -11,7 +11,7 @@ import HL.View.Template
 
 hpSection :: Html ()
 hpSection = do
-  let hpRoot = "http://www.haskell.org/platform/"
+  let hpRoot = "http://www.haskell.org/platform/site/"
   h2_ "Haskell Platform"
   p_ $ "The Haskell Platform is a convenient way to install the Haskell development tools and"
        <> " a collection of commonly used Haskell packages from Hackage."
